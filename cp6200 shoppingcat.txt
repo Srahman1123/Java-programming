@@ -1,0 +1,687 @@
+This code I have
+
+import java.util.List;
+import java.util.Scanner;
+
+public class ShoppingCartManager {
+
+   public static void main(String[] args) {
+      
+       ShoppingCartManager manager = new ShoppingCartManager();
+      
+       Scanner scanner = new Scanner(System.in);
+       System.out.println("Enter Customer's Name:");
+       String customer = scanner.nextLine();
+       System.out.println("Enter Today's Date:");
+       String date = scanner.nextLine();
+       System.out.println();
+       System.out.println("Customer Name: " + customer);
+       System.out.println("Today's Date: " + date);
+       System.out.println();
+       manager.printMenu(new ShoppingCart(), customer, date);
+      
+   }
+  
+   public void printMenu(ShoppingCart cart, String customer, String date)
+   {
+       String input = "";
+       Scanner sc = new Scanner(System.in);
+       do
+       {
+           System.out.println("MENU");
+           System.out.println("a - Add item to cart");
+           System.out.println("d - Remove item from cart");
+           System.out.println("c - Change item quantity");
+           System.out.println("i - Output items' descriptions");
+           System.out.println("o - Output shopping cart");
+           System.out.println("q - Quit");
+           System.out.println();
+           System.out.println("Choose an option:");
+           System.out.println("Choose an option:");
+           System.out.println("Choose an option:");
+           input = sc.nextLine();
+           if(input.equalsIgnoreCase("a"))
+           {
+               addItem(cart);
+               continue;
+           }
+           else if(input.equalsIgnoreCase("d"))
+           {
+               removeItem(cart);
+               continue;
+           }
+           else if(input.equalsIgnoreCase("c"))
+           {
+               changeQuantity(cart);
+               continue;
+           }
+           else if(input.equalsIgnoreCase("i"))
+           {
+               outputDescriptions(customer, date, cart);
+               continue;
+           }
+           else if(input.equalsIgnoreCase("o"))
+           {
+               outputShoppingCart(customer, date, cart);
+           }
+           else if(input.equalsIgnoreCase("q"))
+           {
+               break;
+           }
+       }while(!input.equals("q"));
+      
+   }
+  
+   public void addItem(ShoppingCart cart)
+   {
+       List<ItemToPurchase> cartItems = cart.getCartItems();
+       System.out.println("ADD ITEM TO CART");
+       Scanner sc = new Scanner(System.in);
+       System.out.println("Enter the item name");
+       String name = sc.nextLine();
+       System.out.println("Enter the item description");
+       String description = sc.nextLine();
+       System.out.println("Enter the item price");
+       Integer price = sc.nextInt();
+       System.out.println("Enter the item quantity");
+       Integer quantity = sc.nextInt();
+      
+       ItemToPurchase item = new ItemToPurchase(name, description, price, quantity);
+       cartItems.add(item);
+   }
+  
+   public void removeItem(ShoppingCart cart)
+   {
+       System.out.println("REMOVE ITEM FROM CART");
+       Scanner sc = new Scanner(System.in);
+       System.out.println("Enter the name of item to remove");
+       String name = sc.nextLine();
+       ItemToPurchase i = cart.getItem(name);
+       cart.removeItem(i);
+   }
+  
+   public void changeQuantity(ShoppingCart cart)
+   {
+       System.out.println("CHANGE ITEM QUANTITY");
+       System.out.println("Enter the item name");
+       Scanner sc = new Scanner(System.in);
+       String name = sc.nextLine();
+       System.out.println("Enter the new quantity");
+       Integer quantity = sc.nextInt();
+      
+       ItemToPurchase i = cart.getItem(name);
+       i.setQuantity(quantity);
+      
+   }
+  
+   public void outputShoppingCart(String customer, String date, ShoppingCart cart)
+   {
+       List<ItemToPurchase> cartItems = cart.getCartItems();
+       System.out.println("OUTPUT SHOPPING CART");
+       System.out.println(customer + "'s Shopping Cart - " + date);
+       System.out.println("Number of Items: " + cartItems.size());
+      
+       if(cartItems.isEmpty())
+       {
+           System.out.println("SHOPPING CART IS EMPTY");
+       }
+       else {
+           for(ItemToPurchase i : cartItems)
+           {
+               System.out.println(i.getName() + " " + i.getQuantity() + " @ " + i.getPrice()
+               + " = "
+           + (i.getQuantity()*i.getPrice()));
+           }
+       }
+       System.out.println();
+       int totalCost = 0;
+       for(ItemToPurchase i : cartItems)
+       {
+           int x = i.getQuantity();
+           int y = i.getPrice();
+           int singleCost = x*y;
+           totalCost += singleCost;
+       }
+       System.out.println("Total: $" + totalCost);
+   }
+
+  
+   public void outputDescriptions(String customer, String date, ShoppingCart cart)
+   {
+       List<ItemToPurchase> cartItems = cart.getCartItems();
+       System.out.println("OUTPUT ITEMS' DESCRIPTION");
+
+       System.out.println(customer + "'s Shopping Cart - " + date);
+       System.out.println();
+       System.out.println("Item Descriptions");
+       for(ItemToPurchase i : cartItems)
+       {
+           System.out.println(i.getName() + ": " + i.getDescription());
+       }
+   }
+  
+}
+
+
+
+public class ItemToPurchase {
+
+   private Integer id;
+   private String name;
+   private String itemDescription;
+   private Integer price;
+   private Integer quantity;
+  
+   public Integer getId() {
+       return id;
+   }
+   public void setId(Integer id) {
+       this.id = id;
+   }
+   public String getName() {
+       return name;
+   }
+   public void setName(String name) {
+       this.name = name;
+   }
+   public String getDescription() {
+       return itemDescription;
+   }
+   public void setDescription(String description) {
+       this.itemDescription = description;
+   }
+   public Integer getPrice() {
+       return price;
+   }
+   public void setPrice(Integer price) {
+       this.price = price;
+   }
+   public Integer getQuantity() {
+       return quantity;
+   }
+   public void setQuantity(Integer quantity) {
+       this.quantity = quantity;
+   }
+  
+   public void printItemCost()
+   {
+       System.out.println(this.price);
+   }
+  
+   public void printItemDescription()
+   {
+       System.out.println(this.itemDescription);
+   }
+   @Override
+   public String toString() {
+       return "ItemToPurchase [id=" + id + ", name=" + name + ", itemDescription=" + itemDescription + ", price="
+               + price + ", quantity=" + quantity + "]";
+   }
+   public ItemToPurchase(String name, String itemDescription, Integer price, Integer quantity) {
+       super();
+       this.name = name;
+       this.itemDescription = itemDescription;
+       this.price = price;
+       this.quantity = quantity;
+   }
+  
+   public ItemToPurchase()
+   {
+      
+   }
+  
+  
+}
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ShoppingCart {
+
+   private String customerName;
+   private String currentDate;
+   private List<ItemToPurchase> cartItems = new ArrayList<>();
+  
+   public ShoppingCart()
+   {
+       this.customerName = "none";
+       this.currentDate = "January 1, 2016";
+   }
+  
+   public ShoppingCart(String customerName, String currentDate)
+   {
+       this.customerName = customerName;
+       this.currentDate = currentDate;
+   }
+
+   public String getCustomerName() {
+       return customerName;
+   }
+
+   public void setCustomerName(String customerName) {
+       this.customerName = customerName;
+   }
+
+   public String getCurrentDate() {
+       return currentDate;
+   }
+
+   public void setCurrentDate(String currentDate) {
+       this.currentDate = currentDate;
+   }
+
+   public List<ItemToPurchase> getCartItems() {
+       return cartItems;
+   }
+
+   public void setCartItems(List<ItemToPurchase> cartItems) {
+       this.cartItems = cartItems;
+   }
+
+   public void addItem(ItemToPurchase item)
+   {
+       cartItems.add(item);
+   }
+  
+   public void removeItem(ItemToPurchase item)
+   {
+       if(cartItems.remove(item)== false)
+       {
+           System.out.println("Item not found in cart. Nothing removed.");          
+       }
+       else {
+       }
+   }
+  
+   public ItemToPurchase getItem(String name)
+   {
+       for(ItemToPurchase i : cartItems)
+       {
+           if(i.getName().equalsIgnoreCase(name))
+           {
+               return i;
+           }
+       }
+       return null;
+   }
+  
+   public void modifyItem(ItemToPurchase item)
+   {
+       boolean found = false;
+       for(ItemToPurchase cartItem : cartItems)
+       {
+           if(item.getName().equalsIgnoreCase(cartItem.getName()))
+           {
+               found = true;
+              
+               // check for default values first, I could not because your images
+               // do not include the default values of ItemToPurchase class
+               cartItem.setDescription(item.getDescription());
+               cartItem.setPrice(item.getPrice());
+               cartItem.setQuantity(item.getQuantity());
+           }
+       }
+       if(!found)
+       {
+           System.out.println("Item not found in cart. Nothing modified.");
+       }
+   }
+  
+   public Integer getNumItemsInCart()
+   {
+       return cartItems.size();
+   }
+  
+   public Integer getCostOfCart()
+   {
+       Integer totalCost = 0;
+       for(ItemToPurchase i : cartItems)
+       {
+           int x = i.getQuantity();
+           int y = i.getPrice();
+           int singleCost = x*y;
+           totalCost += singleCost;
+       }
+      
+       return totalCost;
+   }
+  
+   public void printTotal(String customer, String date)
+   {
+       System.out.println(customer + "'s Shopping Cart - " + date);
+       System.out.println("Number of Items: " + cartItems.size());
+      
+       if(cartItems.isEmpty())
+       {
+           System.out.println("SHOPPING CART IS EMPTY");
+       }
+       else {
+           for(ItemToPurchase i : cartItems)
+           {
+               System.out.println(i.getName() + " " + i.getQuantity() + " @ " + i.getPrice()
+               + " = "
+           + (i.getQuantity()*i.getPrice()));
+           }
+       }
+       System.out.println();
+       int totalCost = 0;
+       for(ItemToPurchase i : cartItems)
+       {
+           int x = i.getQuantity();
+           int y = i.getPrice();
+           int singleCost = x*y;
+           totalCost += singleCost;
+       }
+       System.out.println("Total: $" + totalCost);
+   }
+  
+   public void printDescriptions(String customer, String date)
+   {
+       System.out.println(customer + "'s Shopping Cart - " + date);
+       System.out.println();
+       System.out.println("Item Descriptions");
+       for(ItemToPurchase i : cartItems)
+       {
+           System.out.println(i.getName() + ": " + i.getDescription());
+       }
+   }
+  
+  
+}
+The output I get is down here:
+
+Enter Customer's Name:
+John Doe
+February 1, 2016
+qEnter Today's Date:
+
+Customer Name: John Doe
+Today's Date: February 1, 2016
+
+MENU
+a - Add item to cart
+d - Remove item from cart
+c - Change item quantity
+i - Output items' descriptions
+o - Output shopping cart
+q - Quit
+
+Choose an option:
+Choose an option:
+Choose an option:
+
+But the output should be this below:
+
+OUTPUT SHOPPING CART
+John Doe's Shopping Cart - February 1, 2016
+Number of Items: 0
+
+SHOPPING CART IS EMPTY
+
+Total: $0
+
+MENU
+a - Add item to cart
+d - Remove item from cart
+c - Change item quantity
+i - Output items' descriptions
+o - Output shopping cart
+q - Quit
+
+Choose an option:
+10: Compare output
+0 / 3
+Exception in thread "main" java.util.NoSuchElementException: No line found
+	at java.base/java.util.Scanner.nextLine(Scanner.java:1651)
+	at ShoppingCartManager.printMenu(ShoppingCartManager.java:41)
+	at ShoppingCartManager.main(ShoppingCartManager.java:20)
+Input
+John Doe
+February 1, 2016
+a
+Nike Romaleos
+Volt color, Weightlifting shoes
+189
+2
+o
+q
+Your output ends with
+Enter Customer's Name:
+Enter Today's Date:
+
+Customer Name: John Doe
+Today's Date: February 1, 2016
+
+MENU
+a - Add item to cart
+d - Remove item from cart
+c - Change item quantity
+i - Output items' descriptions
+o - Output shopping cart
+q - Quit
+
+Choose an option:
+Choose an option:
+Choose an option:
+Expected output ends with
+ADD ITEM TO CART
+Enter the item name:
+Enter the item description:
+Enter the item price:
+Enter the item quantity:
+
+MENU
+a - Add item to cart
+d - Remove item from cart
+c - Change item quantity
+i - Output items' descriptions
+o - Output shopping cart
+q - Quit
+
+Choose an option:
+OUTPUT SHOPPING CART
+John Doe's Shopping Cart - February 1, 2016
+Number of Items: 2
+
+Nike Romaleos 2 @ $189 = $378
+
+Total: $378
+
+MENU
+a - Add item to cart
+d - Remove item from cart
+c - Change item quantity
+i - Output items' descriptions
+o - Output shopping cart
+q - Quit
+
+Choose an option:
+11: Compare output
+0 / 2
+Exception in thread "main" java.util.NoSuchElementException: No line found
+	at java.base/java.util.Scanner.nextLine(Scanner.java:1651)
+	at ShoppingCartManager.printMenu(ShoppingCartManager.java:41)
+	at ShoppingCartManager.main(ShoppingCartManager.java:20)
+Input
+John Doe
+February 1, 2016
+a
+Nike Romaleos
+Volt color, Weightlifting shoes
+189
+2
+d
+Spectre DVD
+q
+Your output ends with
+Enter Customer's Name:
+Enter Today's Date:
+
+Customer Name: John Doe
+Today's Date: February 1, 2016
+
+MENU
+a - Add item to cart
+d - Remove item from cart
+c - Change item quantity
+i - Output items' descriptions
+o - Output shopping cart
+q - Quit
+
+Choose an option:
+Choose an option:
+Choose an option:
+Expected output ends with
+REMOVE ITEM FROM CART
+Enter name of item to remove:
+Item not found in cart. Nothing removed.
+
+MENU
+a - Add item to cart
+d - Remove item from cart
+c - Change item quantity
+i - Output items' descriptions
+o - Output shopping cart
+q - Quit
+
+Choose an option:
+12: Compare output
+0 / 2
+Exception in thread "main" java.util.NoSuchElementException: No line found
+	at java.base/java.util.Scanner.nextLine(Scanner.java:1651)
+	at ShoppingCartManager.printMenu(ShoppingCartManager.java:41)
+	at ShoppingCartManager.main(ShoppingCartManager.java:20)
+Input
+John Doe
+February 1, 2016
+a
+Nike Romaleos
+Volt color, Weightlifting shoes
+189
+2
+a
+Chocolate Chips
+Semi-sweet
+3
+5
+a
+Powerbeats 2 Headphones
+Bluetooth headphones
+128
+1
+d
+Chocolate Chips
+o
+q
+Your output ends with
+Enter Customer's Name:
+Enter Today's Date:
+
+Customer Name: John Doe
+Today's Date: February 1, 2016
+
+MENU
+a - Add item to cart
+d - Remove item from cart
+c - Change item quantity
+i - Output items' descriptions
+o - Output shopping cart
+q - Quit
+
+Choose an option:
+Choose an option:
+Choose an option:
+Expected output ends with
+REMOVE ITEM FROM CART
+Enter name of item to remove:
+
+MENU
+a - Add item to cart
+d - Remove item from cart
+c - Change item quantity
+i - Output items' descriptions
+o - Output shopping cart
+q - Quit
+
+Choose an option:
+OUTPUT SHOPPING CART
+John Doe's Shopping Cart - February 1, 2016
+Number of Items: 3
+
+Nike Romaleos 2 @ $189 = $378
+Powerbeats 2 Headphones 1 @ $128 = $128
+
+Total: $506
+
+MENU
+a - Add item to cart
+d - Remove item from cart
+c - Change item quantity
+i - Output items' descriptions
+o - Output shopping cart
+q - Quit
+
+Choose an option:
+13: Compare output
+0 / 2
+Exception in thread "main" java.util.NoSuchElementException: No line found
+	at java.base/java.util.Scanner.nextLine(Scanner.java:1651)
+	at ShoppingCartManager.printMenu(ShoppingCartManager.java:41)
+	at ShoppingCartManager.main(ShoppingCartManager.java:20)
+Input
+John Doe
+February 1, 2016
+a
+Nike Romaleos
+Volt color, Weightlifting shoes
+189
+2
+a
+Chocolate Chips
+Semi-sweet
+3
+5
+a
+Powerbeats 2 Headphones
+Bluetooth headphones
+128
+1
+c
+Thermos Stainless Steel King
+5
+q
+Your output ends with
+Name:
+Enter Today's Date:
+
+Customer Name: John Doe
+Today's Date: February 1, 2016
+
+MENU
+a - Add item to cart
+d - Remove item from cart
+c - Change item quantity
+i - Output items' descriptions
+o - Output shopping cart
+q - Quit
+
+Choose an option:
+Choose an option:
+Choose an option:
+Expected output ends with
+CHANGE ITEM QUANTITY
+Enter the item name:
+Enter the new quantity:
+Item not found in cart. Nothing modified.
+
+MENU
+a - Add item to cart
+d - Remove item from cart
+c - Change item quantity
+i - Output items' descriptions
+o - Output shopping cart
+q - Quit
+
+Choose an option:
+

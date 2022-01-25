@@ -1,0 +1,105 @@
+package Practice_College;
+
+//import org.yaml.snakeyaml.scanner.Scanner;
+import java.util.Scanner;
+
+public class ExamGrade {
+    private String studentName;
+    private int examNum;
+    private double score;
+
+    public static void main(String[] args) {
+        String userName = "";
+        int examNumber;
+        double grade;
+
+        //creating an instance of ExamGrade with own information
+        ExamGrade owneExamGradeObj = new ExamGrade("Shamsur Rahman", 3, 99);
+        ExamGrade otherExamGradeObj = new ExamGrade("Daniel Redcliff", 2, 55);
+
+        //creating instance of ExamGrade with user input
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter your name: ");
+        userName = sc.next();
+        System.out.println("Enter the exam number: ");
+        examNumber = sc.nextInt();
+        System.out.println("Enter your grade: ");
+        grade = sc.nextDouble();
+        ExamGrade userGradeObj = new ExamGrade(userName, examNumber, grade);
+
+        double averageScore = ( owneExamGradeObj.getScore() + otherExamGradeObj.getScore() + userGradeObj.getScore() ) / 3.0;
+        System.out.println("Average of three exam grades: " + averageScore);
+
+
+    }
+
+   public ExamGrade(String studentName, int examNum, double grade){
+        setStudentName(studentName);
+        setExamNum(examNum);
+        if(grade >=0 && grade <= 120) //valid value
+            score = grade;
+    }
+
+    public String getStudentName(){
+        return studentName;
+    }
+    public int getExamNum(){
+        return examNum;
+    }
+    public double getScore(){
+        return score;
+    }
+    public void setStudentName(String s){
+        studentName = s;
+    }
+    public void setExamNum(int n){
+        if(n>0)
+            examNum = n;
+    }
+    public void setScore(double s){
+        if(s >=0 && s <= 120)
+            score = s;
+    }
+    public Boolean passedExam(){
+        return score >= 65;
+    }
+}
+
+
+
+package Practice_College;
+
+public class ProgrammingExamGrade extends ExamGrade{
+    Boolean hasComment;
+
+    public static void main(String[] args) {
+        ProgrammingExamGrade programmingExamGrade = new ProgrammingExamGrade("Shamsur Rahman", 2, 98);
+        System.out.println("Programming exam grade info: " );
+        System.out.println("Name: " + programmingExamGrade.getStudentName());
+        System.out.println("Exam Grade: " + programmingExamGrade.getScore());
+        System.out.println("Exam Number: " + programmingExamGrade.getExamNum());
+
+        System.out.println("Increasing score by 5, and new information are follows:");
+        programmingExamGrade.setScore(103);
+        System.out.println("Name: " + programmingExamGrade.getStudentName());
+        System.out.println("Exam Grade: " + programmingExamGrade.getScore());
+        System.out.println("Exam Number: " + programmingExamGrade.getExamNum());
+
+    }
+
+
+    public ProgrammingExamGrade(String studentName, int examNum, double grade) {
+        super(studentName, examNum, grade);
+        hasComment = false;
+    }
+
+    @Override
+    public Boolean passedExam(){
+        return super.passedExam() && hasComment;
+    }
+
+    public void setHasComment(Boolean hasComment){
+        this.hasComment = hasComment;
+    }
+}
+

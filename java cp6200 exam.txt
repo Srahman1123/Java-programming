@@ -1,0 +1,88 @@
+package Practice_College;
+
+import java.util.Scanner;
+
+
+public class CP_6200 {
+//Shamsur Rahman, Nov 23.
+    public static void main(String[] args) {
+        int month = 11;
+        int day = 23;
+
+
+        //create a scanner objet to get the user input
+        Scanner sc = new Scanner(System.in);
+
+        int[] array = new int[month + 10];// Declaring the array to store the numbers
+
+
+        //Then let the user enter each value to store in the array. 
+        for (int i = 0; i < array.length; i++) {//for to fill the array
+
+
+            do {
+                //ask the value
+                System.out.print("Enter the value " +  ": ");
+                //save each integer value in the array
+                array[i] = sc.nextInt();
+
+
+                if (array[i] < 1 || array[i] > day) {
+                    System.out.println("ivalid: the value must be in the range 1-" + day);
+                }
+
+
+            } while (array[i] < 1 || array[i] > day); //while the value is out of the range 1 - day
+        }
+
+
+
+        while (array.length > 1) {//while the array length is greater than 1
+
+
+
+            //using ceil the size will be 4 
+            int repArraySize = (int) Math.ceil((double) array.length / 3);
+            //create the array
+            int[] rep = new int[repArraySize];
+            //index to change position of the  array
+            int j = 0;
+
+
+            int sum = 0;
+
+
+            for (int i = 0; i < array.length; i++) {
+                //sum each element in the array   
+                sum += array[i];
+
+                if ((i + 1) % 3 == 0 || i == array.length - 1) {
+                    rep[j] = sum;//store the sum in the  array
+                    sum = 0;//reset sum to 0
+                    j++;//increase the index 
+                }
+
+
+            }
+
+
+
+            for (int i = 0; i < rep.length; i++) {
+                if (rep[i] > 12) {
+                    rep[i] -= 12;//subtract 12
+                }
+            }
+
+
+            array = rep;//The new array
+        }
+
+
+        //print the result
+        System.out.println("Result: " + array[0]);
+
+
+    }
+
+
+}
